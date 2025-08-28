@@ -1,17 +1,16 @@
 <tool id="tb_profiler_collate" name="TB-Profiler Collate" version="0.1.0+galaxy0" profile="21.05">
 
-  <!--
   <requirements>
     <requirement type="package" version="6.6.4">tb-profiler</requirement>
   </requirements>
-  -->
 
   <command detect_errors="exit_code"><![CDATA[
-    #for $dataset in $input_files
-      ln -s '$dataset' '$dataset.element_identifier' &&
-    #end for
 
-    /home/bntozini/miniconda3/envs/tbprofiler_env/bin/tb-profiler collate --dir . &&
+    #for $dataset in $input_files
+      #set dataset_file_name = dataset.element_identifier.replace('.results.json', '') + '.results.json'
+      ln -s '$dataset' '$dataset_file_name' &&
+    #end for
+    tb-profiler collate --dir . &&
 
     cp tbprofiler.txt '$output_txt' &&
     cp tbprofiler.variants.csv '$output_csv' &&
@@ -32,7 +31,7 @@
       <test expect_num_outputs="3">
           <param name="input_files">
               <collection type="list">
-                  <element name="file1" value="ERR2510682.results.json" ftype="json"/>
+                  <element name="ERR2510682" value="ERR2510682.results.json" ftype="json"/>
               </collection>
           </param>
 
